@@ -23,6 +23,11 @@ def encode(text):
 def distance(embedding1, embedding2):
     return np.linalg.norm(embedding1 - embedding2)
 
+def print_top_results(results, index):
+    for idx, dist in results:
+        print(f"Distance: {dist}")
+        print(f"Sentence: {index[idx]['sentence'].strip()}\n")
+
 def match(query, index, top_k=5):
     results = []
     source_embedding = encode(query)
@@ -35,11 +40,14 @@ def match(query, index, top_k=5):
     results.sort(key=lambda x: x[1])
     
     # Return only the top k results
-    return results[:top_k]
+    top_results = results[:top_k]
+    
+    # Print the top results
+    print("Top 5 Results:")
+    print_top_results(top_results, index)
 
 json_file_path = '/tmp/myindex.json' 
 embeddings = load_index(json_file_path)
 
-query = "Selada Keriting 500 Gram"
-results = match(query, embeddings, top_k=5)
-print(results)
+query = "Selada Hijau 500 gr"
+match(query, embeddings, top_k=5)
